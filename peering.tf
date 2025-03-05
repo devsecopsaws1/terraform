@@ -25,3 +25,4 @@ resource "aws_route" "prod_peering" {
   vpc_peering_connection_id = aws_vpc_peering_connection.peering[0].id
   
 }
+
