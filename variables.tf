@@ -154,3 +154,35 @@ variable "private_subnet_cidr" {
 #   description = "name of instance"
 #   type = map
 # }
+
+
+variable "sg_name" {
+   type=string  
+}
+
+variable "sg_descritption" {
+   type=string  
+}
+
+variable "ingress_rules"{
+    type = list
+} 
+
+variable "app_sg_name" {
+   type=string  
+}
+
+variable "app_ingress_rules" {
+  type = list
+  
+}
+
+
+variable "is_peering_required" {
+  type = bool
+}
+
+
+variable "peering_env" {
+   type=string  
+}

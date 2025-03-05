@@ -8,9 +8,7 @@ terraform {
     }
 
     backend "s3" {
-      bucket = "roboshop-statefile-bucket"
-      key = "roboshop-project-dev/terraform.state"
-      region="us-east-1"
+
     }
 }
 

@@ -112,3 +112,6 @@ resource "aws_route_table_association" "private_subnet" {
     subnet_id      = element(aws_subnet.private_roboshop_subnet[*].id, count.index) #element(list,index)
     route_table_id = aws_route_table.private_roboshop_route_table.id
 }
+
+
+#function -- same code -- > reuse
