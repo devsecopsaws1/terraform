@@ -17,4 +17,18 @@ module "vpc" {
 
 #source = "./modules/vpc"  project1 ---->  2 -- github url
 
+module "dev_prod_peering" {
+  source             = "./modules/peering"
+  requestor_vpc_id   = module.vpc.vpc_id
+  peer_vpc_id        = data.aws_ssm_parameter.peering_vpc_id.value
+  requestor_cidr_block = module.vpc.vpc_cider_block
+  peer_cidr_block    = data.aws_ssm_parameter.vpc_cider_block.value
+  auto_accept        = true
+  route_table_id     = module.vpc.public_route_table_id
+  dest_route_table_id = data.aws_ssm_parameter.public_route_table_id.value
+  project_name = var.project_name
+  env = var.env
+  common_tags = var.common_tags
+}
+
 

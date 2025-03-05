@@ -15,3 +15,4 @@ data "aws_ssm_parameter" "public_route_table_id" {
 # data "aws_ssm_parameter" "peering_vpc_id" {
 #   name = (var.peering_env == "prod" || var.peering_env == "stage") ? "/${var.project_name}/${var.peering_env}/vpc_id" : null
 # }
+
