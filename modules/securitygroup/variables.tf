@@ -20,6 +20,7 @@ variable "vpc_id" {
 
 variable "ingress_rules"{
     type = list
+    default = []
 } 
 
 variable "egress_rules"{

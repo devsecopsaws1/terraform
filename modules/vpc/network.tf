@@ -46,7 +46,18 @@ resource "aws_subnet" "private_roboshop_subnet" {
                                            } )
 }
 
+resource "aws_subnet" "database_roboshop_subnet" {
+    count = length(var.database_subnet_cidr) #2 == 1st count.index = 0, 2nd count.index=1
+    vpc_id                               = aws_vpc.roboshop_vpc.id
+    cidr_block                           = var.database_subnet_cidr[count.index] # 32-26=6 = 2^(32-26)= 2^6 = 64 IPs
+    availability_zone                    = local.azs[count.index]
+    tags  = merge(var.common_tags,
+                                           {
+                                            Name = "${var.project_name}-${var.env}-database-${local.azs[count.index]}" # rorboshop-dev ${} === interpolation
 
+                                           } )
+  
+}
 
 resource "aws_route_table" "public_roboshop_route_table" {
     vpc_id                               = aws_vpc.roboshop_vpc.id
@@ -101,6 +112,22 @@ resource "aws_route" "private_route" {
 
 }
 
+resource "aws_route_table" "database_roboshop_route_table" {
+    vpc_id                               = aws_vpc.roboshop_vpc.id
+    tags                                 = merge(var.common_tags,
+                                           {
+                                            Name = "${var.project_name}-${var.env}-database" # rorboshop-dev ${} === interpolation
+
+                                           } )
+  
+}
+
+resource "aws_route" "database_route" {
+  route_table_id            = aws_route_table.database_roboshop_route_table.id
+  destination_cidr_block    = "0.0.0.0/0"
+  nat_gateway_id = aws_nat_gateway.roboshop-nat.id
+  
+}
 resource "aws_route_table_association" "public_subnet" {
     count = length(var.public_subnet_cidr) #2
     subnet_id      = element(aws_subnet.public_roboshop_subnet[*].id, count.index) #element(list,index)
@@ -111,6 +138,13 @@ resource "aws_route_table_association" "private_subnet" {
     count = length(var.private_subnet_cidr) #2
     subnet_id      = element(aws_subnet.private_roboshop_subnet[*].id, count.index) #element(list,index)
     route_table_id = aws_route_table.private_roboshop_route_table.id
+}
+
+resource "aws_route_table_association" "database_subnet" {
+    count = length(var.database_subnet_cidr) #2
+    subnet_id      = element(aws_subnet.database_roboshop_subnet[*].id, count.index) #element(list,index)
+    route_table_id = aws_route_table.database_roboshop_route_table.id
+  
 }
 
 

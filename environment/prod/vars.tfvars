@@ -22,20 +22,6 @@ app_ingress_rules = [ {
 }
 ]
 
-ingress_rules = [ {
-    from_port = 0
-    to_port = 0
-    protocol = "-1" #all protocols
-    cidr_blocks = ["0.0.0.0/0"]
-},
-{
-    from_port = 22
-    to_port = 22
-    protocol = "tcp" #all protocols
-    cidr_blocks = ["0.0.0.0/0"]
-}
-]
-
 sg_name = "web-sg"
 sg_descritption = "security group for dynamic block"
 is_peering_required = false

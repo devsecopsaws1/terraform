@@ -164,9 +164,9 @@ variable "sg_descritption" {
    type=string  
 }
 
-variable "ingress_rules"{
-    type = list
-} 
+# variable "ingress_rules"{
+#     type = list
+# } 
 
 variable "app_sg_name" {
    type=string  
@@ -185,4 +185,106 @@ variable "is_peering_required" {
 
 variable "peering_env" {
    type=string  
+}
+
+variable "alb_common_tags" {
+  description = "Tags for the VPC"
+  type = map(string)  #datatype of the variable and it is a key and value pair
+  default = {
+     Terraform = "true"
+     Component = "App-ALB"
+  }
+}
+
+variable "database_subnet_cidr" {
+  description = "CIDR Block for the Subnet"
+  type = list(string)
+}
+
+variable "zone_name" {
+  default = "anikacoffee.xyz"
+}
+
+variable "catalogue_common_tags" {
+  description = "Tags for the VPC"
+  type = map(string)  #datatype of the variable and it is a key and value pair
+  default = {
+     Terraform = "true"
+     Component = "Catalogue"
+  }
+}
+
+variable "web_alb_common_tags" {
+  description = "Tags for the VPC"
+  type = map(string)  #datatype of the variable and it is a key and value pair
+  default = {
+     Terraform = "true"
+     Component = "web-ALB"
+  }
+}
+
+variable "web_common_tags" {
+  description = "Tags for the VPC"
+  type = map(string)  #datatype of the variable and it is a key and value pair
+  default = {
+     Terraform = "true"
+     Component = "web"
+  }
+}
+#=====================
+
+variable "health_check" {
+
+  default = {
+    enabled = true
+    healthy_threshold = 2 # consider as healthy if 2 health checks are success
+    interval = 15
+    matcher = "200-299"
+    path = "/"
+    port = 80
+    protocol = "HTTP"
+    timeout = 5
+    unhealthy_threshold = 3
+  }
+}
+
+variable "target_group_port" {
+  default = 80
+}
+
+
+variable "launch_template_tags" {
+  default = [
+    {
+      resource_type = "instance"
+
+      tags = {
+        Name = "web"
+      }
+    },
+
+    {
+      resource_type = "volume"
+
+      tags = {
+        Name = "web"
+      }
+    }
+
+  ]
+}
+
+variable "autoscaling_tags" {
+  default = [
+    {
+      key                 = "Name"
+      value               = "web"
+      propagate_at_launch = true
+    },
+    {
+      key                 = "Project"
+      value               = "Roboshop"
+      propagate_at_launch = true
+    }
+  ]
 }

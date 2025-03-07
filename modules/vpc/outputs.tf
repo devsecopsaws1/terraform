@@ -15,6 +15,10 @@ output "public_route_table_id" {
   
 }
 
+output "database_subnet_ids" {
+  value = aws_subnet.database_roboshop_subnet[*].id
+  
+}
 output "vpc_cider_block" {
   value = aws_vpc.roboshop_vpc.cidr_block
   

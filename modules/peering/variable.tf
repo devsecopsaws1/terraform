@@ -50,3 +50,7 @@ variable "env" {
 variable "project_name" {
    type=string  
 }
+
+variable "is_peering_required" {
+  type = bool
+}
