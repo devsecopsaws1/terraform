@@ -256,6 +256,49 @@ resource "aws_security_group_rule" "catalogue_alb" {
     security_group_id = module.catalogue_sg.sg_id
 }
 
+resource "aws_security_group_rule" "user_alb" {
+    type = "ingress"
+    from_port = 8080
+    to_port = 8080
+    protocol = "tcp"
+
+    source_security_group_id = module.alb_sg.sg_id
+    security_group_id = module.user_sg.sg_id
+}
+
+resource "aws_security_group_rule" "cart_alb" {
+    type = "ingress"
+    from_port = 8080
+    to_port = 8080
+    protocol = "tcp"
+
+    source_security_group_id = module.alb_sg.sg_id
+    security_group_id = module.cart_sg.sg_id
+}
+
+resource "aws_security_group_rule" "alb_user" {
+  type              = "ingress"
+  description = "Allowing port number 80 from user"
+  from_port         = 80
+  to_port           = 80
+  protocol          = "tcp"
+  source_security_group_id = module.user_sg.sg_id
+  #cidr_blocks       = ["${chomp(data.http.myip.body)}/32"]
+  #ipv6_cidr_blocks  = [aws_vpc.example.ipv6_cidr_block]
+  security_group_id = module.alb_sg.sg_id
+}
+
+resource "aws_security_group_rule" "alb_cart" {
+  type              = "ingress"
+  description = "Allowing port number 80 from user"
+  from_port         = 80
+  to_port           = 80
+  protocol          = "tcp"
+  source_security_group_id = module.cart_sg.sg_id
+  #cidr_blocks       = ["${chomp(data.http.myip.body)}/32"]
+  #ipv6_cidr_blocks  = [aws_vpc.example.ipv6_cidr_block]
+  security_group_id = module.alb_sg.sg_id
+}
 resource "aws_security_group_rule" "web_app_alb" {
     type = "ingress"
     from_port = 80

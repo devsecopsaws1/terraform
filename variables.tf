@@ -288,3 +288,22 @@ variable "autoscaling_tags" {
     }
   ]
 }
+
+
+variable "user_common_tags" {
+  description = "Tags for the VPC"
+  type = map(string)  #datatype of the variable and it is a key and value pair
+  default = {
+     Terraform = "true"
+     Component = "User"
+  }
+}
+
+variable "cart_common_tags" {
+  description = "Tags for the VPC"
+  type = map(string)  #datatype of the variable and it is a key and value pair
+  default = {
+     Terraform = "true"
+     Component = "Cart"
+  }
+}

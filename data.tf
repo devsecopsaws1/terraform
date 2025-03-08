@@ -74,6 +74,23 @@ data "aws_ssm_parameter" "web_alb_listener_arn" {
     name = "/${var.project_name}/${var.env}/web_alb_listener_arn"
 }
 
+data "aws_ssm_parameter" "redis_sg_id" {
+  depends_on = [ aws_ssm_parameter.redis_sg_id ]
+  name = "/${var.project_name}/${var.env}/redis_sg_id"
+  
+}
+
+data "aws_ssm_parameter" "user_sg_id" {
+  depends_on = [ aws_ssm_parameter.user_sg_id ]
+  name = "/${var.project_name}/${var.env}/user_sg_id"
+  
+}
+
+data "aws_ssm_parameter" "cart_sg_id" {
+  depends_on = [ aws_ssm_parameter.cart_sg_id ]
+  name = "/${var.project_name}/${var.env}/cart_sg_id"
+  
+}
 # data "aws_ssm_parameter" "peering_vpc_id" {
 #   name = (var.peering_env == "prod" || var.peering_env == "stage") ? "/${var.project_name}/${var.peering_env}/vpc_id" : null
 # }
