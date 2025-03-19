@@ -231,6 +231,8 @@ variable "web_common_tags" {
      Component = "web"
   }
 }
+
+
 #=====================
 
 variable "health_check" {
@@ -240,8 +242,8 @@ variable "health_check" {
     healthy_threshold = 2 # consider as healthy if 2 health checks are success
     interval = 15
     matcher = "200-299"
-    path = "/"
-    port = 80
+    path = "/health"
+    port = 8080
     protocol = "HTTP"
     timeout = 5
     unhealthy_threshold = 3
@@ -249,7 +251,7 @@ variable "health_check" {
 }
 
 variable "target_group_port" {
-  default = 80
+  default = 8080
 }
 
 
@@ -267,7 +269,7 @@ variable "launch_template_tags" {
       resource_type = "volume"
 
       tags = {
-        Name = "web"
+        Name = "User"
       }
     }
 
@@ -278,7 +280,7 @@ variable "autoscaling_tags" {
   default = [
     {
       key                 = "Name"
-      value               = "web"
+      value               = "User"
       propagate_at_launch = true
     },
     {
@@ -306,4 +308,88 @@ variable "cart_common_tags" {
      Terraform = "true"
      Component = "Cart"
   }
+}
+
+
+variable "cart_launch_template_tags" {
+  default = [
+    {
+      resource_type = "instance"
+
+      tags = {
+        Name = "cart"
+      }
+    },
+
+    {
+      resource_type = "volume"
+
+      tags = {
+        Name = "Cart"
+      }
+    }
+
+  ]
+}
+
+variable "cart_autoscaling_tags" {
+  default = [
+    {
+      key                 = "Name"
+      value               = "Cart"
+      propagate_at_launch = true
+    },
+    {
+      key                 = "Project"
+      value               = "Roboshop"
+      propagate_at_launch = true
+    }
+  ]
+}
+
+
+variable "shipping_common_tags" {
+  description = "Tags for the VPC"
+  type = map(string)  #datatype of the variable and it is a key and value pair
+  default = {
+     Terraform = "true"
+     Component = "Shipping"
+  }
+}
+
+
+variable "shipping_launch_template_tags" {
+  default = [
+    {
+      resource_type = "instance"
+
+      tags = {
+        Name = "shipping"
+      }
+    },
+
+    {
+      resource_type = "volume"
+
+      tags = {
+        Name = "Shipping"
+      }
+    }
+
+  ]
+}
+
+variable "shipping_autoscaling_tags" {
+  default = [
+    {
+      key                 = "Name"
+      value               = "Shipping"
+      propagate_at_launch = true
+    },
+    {
+      key                 = "Project"
+      value               = "Roboshop"
+      propagate_at_launch = true
+    }
+  ]
 }

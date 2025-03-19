@@ -80,9 +80,21 @@ data "aws_ssm_parameter" "redis_sg_id" {
   
 }
 
+data "aws_ssm_parameter" "mysql_sg_id" {
+  depends_on = [ aws_ssm_parameter.mysql_sg_id ]
+  name = "/${var.project_name}/${var.env}/mysql_sg_id"
+  
+}
+
 data "aws_ssm_parameter" "user_sg_id" {
   depends_on = [ aws_ssm_parameter.user_sg_id ]
   name = "/${var.project_name}/${var.env}/user_sg_id"
+  
+}
+
+data "aws_ssm_parameter" "shipping_sg_id" {
+  depends_on = [ aws_ssm_parameter.shipping_sg_id ]
+  name = "/${var.project_name}/${var.env}/shipping_sg_id"
   
 }
 

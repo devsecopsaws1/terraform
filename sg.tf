@@ -190,6 +190,7 @@ module "web_alb_sg" {
     vpc_id = module.vpc.vpc_id 
 }
 
+
 resource "aws_security_group_rule" "mongodb_catalogue" {
   type = "ingress"
   from_port = 27017
@@ -206,43 +207,46 @@ resource "aws_security_group_rule" "mongodb_user" {
   protocol = "tcp"
   source_security_group_id = module.user_sg.sg_id
   security_group_id = module.mongodb_sg.sg_id
-}
-
-resource "aws_security_group_rule" "redis_user" {
-    type = "ingress"
-    from_port = 6379
-    to_port = 6379
-    protocol = "tcp"
-    source_security_group_id = module.user_sg.sg_id
-    security_group_id = module.redis_sg.sg_id
-}
-
-resource "aws_security_group_rule" "redis_cart" {
-    type = "ingress"
-    from_port = 6379
-    to_port = 6379
-    protocol = "tcp"
-    source_security_group_id = module.cart_sg.sg_id
-    security_group_id = module.redis_sg.sg_id
-}
-
-resource "aws_security_group_rule" "mysql_shipping" {
-    type = "ingress"
-    from_port = 3306
-    to_port = 3306
-    protocol = "tcp"
-    source_security_group_id = module.shipping_sg.sg_id
-    security_group_id = module.mysql_sg.sg_id
   
 }
 
-resource "aws_security_group_rule" "rabbitmq_payment" {
-    type = "ingress"
-    from_port = 5672
-    to_port = 5672
-    protocol = "tcp"
-    source_security_group_id = module.payment_sg.sg_id
-    security_group_id = module.rabbitmq_sg.sg_id
+resource "aws_security_group_rule" "redis_user" {
+  type = "ingress"
+  from_port = 6379
+  to_port = 6379
+  protocol = "tcp"
+  source_security_group_id = module.user_sg.sg_id
+  security_group_id = module.redis_sg.sg_id
+  
+}
+
+resource "aws_security_group_rule" "redis_cart" {
+  type = "ingress"
+  from_port = 6379
+  to_port = 6379
+  protocol = "tcp"
+  source_security_group_id = module.cart_sg.sg_id
+  security_group_id = module.redis_sg.sg_id
+  
+}
+
+resource "aws_security_group_rule" "mysql_shipping" {
+  type = "ingress"
+  from_port = 3306
+  to_port = 3306
+  protocol = "tcp"
+  source_security_group_id = module.shipping_sg.sg_id
+  security_group_id = module.mysql_sg.sg_id
+  
+}
+
+resource "aws_security_group_rule" "rabbimq_payment" {
+  type = "ingress"
+  from_port = 5672
+  to_port = 5672
+  protocol = "tcp"
+  source_security_group_id = module.payment_sg.sg_id
+  security_group_id = module.rabbitmq_sg.sg_id
   
 }
 
@@ -251,55 +255,11 @@ resource "aws_security_group_rule" "catalogue_alb" {
     from_port = 8080
     to_port = 8080
     protocol = "tcp"
-
     source_security_group_id = module.alb_sg.sg_id
     security_group_id = module.catalogue_sg.sg_id
 }
 
-resource "aws_security_group_rule" "user_alb" {
-    type = "ingress"
-    from_port = 8080
-    to_port = 8080
-    protocol = "tcp"
-
-    source_security_group_id = module.alb_sg.sg_id
-    security_group_id = module.user_sg.sg_id
-}
-
-resource "aws_security_group_rule" "cart_alb" {
-    type = "ingress"
-    from_port = 8080
-    to_port = 8080
-    protocol = "tcp"
-
-    source_security_group_id = module.alb_sg.sg_id
-    security_group_id = module.cart_sg.sg_id
-}
-
-resource "aws_security_group_rule" "alb_user" {
-  type              = "ingress"
-  description = "Allowing port number 80 from user"
-  from_port         = 80
-  to_port           = 80
-  protocol          = "tcp"
-  source_security_group_id = module.user_sg.sg_id
-  #cidr_blocks       = ["${chomp(data.http.myip.body)}/32"]
-  #ipv6_cidr_blocks  = [aws_vpc.example.ipv6_cidr_block]
-  security_group_id = module.alb_sg.sg_id
-}
-
-resource "aws_security_group_rule" "alb_cart" {
-  type              = "ingress"
-  description = "Allowing port number 80 from user"
-  from_port         = 80
-  to_port           = 80
-  protocol          = "tcp"
-  source_security_group_id = module.cart_sg.sg_id
-  #cidr_blocks       = ["${chomp(data.http.myip.body)}/32"]
-  #ipv6_cidr_blocks  = [aws_vpc.example.ipv6_cidr_block]
-  security_group_id = module.alb_sg.sg_id
-}
-resource "aws_security_group_rule" "web_app_alb" {
+resource "aws_security_group_rule" "app_alb_web" {
     type = "ingress"
     from_port = 80
     to_port = 80
@@ -308,36 +268,83 @@ resource "aws_security_group_rule" "web_app_alb" {
     security_group_id = module.alb_sg.sg_id
 }
 
-resource "aws_security_group_rule" "app_alb_catalogue" {
+
+resource "aws_security_group_rule" "web_alb_internet" {
     type = "ingress"
     from_port = 80
     to_port = 80
     protocol = "tcp"
-    source_security_group_id = module.catalogue_sg.sg_id
-    security_group_id = module.alb_sg.sg_id
+    cidr_blocks = ["0.0.0.0/0"]
+    security_group_id = module.web_alb_sg.sg_id
   
 }
 
 resource "aws_security_group_rule" "web_web_alb" {
-  type              = "ingress"
-  description = "Allowing port number 80 from Web ALB"
-  from_port         = 80
-  to_port           = 80
-  protocol          = "tcp"
-  source_security_group_id = module.web_alb_sg.sg_id
-  #cidr_blocks       = ["${chomp(data.http.myip.body)}/32"]
-  #ipv6_cidr_blocks  = [aws_vpc.example.ipv6_cidr_block]
-  security_group_id = module.web_sg.sg_id
+    type = "ingress"
+    from_port = 80
+    to_port = 80
+    protocol = "tcp"
+    source_security_group_id = module.web_alb_sg.sg_id
+    security_group_id = module.web_sg.sg_id
+  
 }
 
-resource "aws_security_group_rule" "web_alb_internet" {
-  type              = "ingress"
-  description = "Allowing port number 80 from Internet"
-  from_port         = 80
-  to_port           = 80
-  protocol          = "tcp"
-  cidr_blocks = ["0.0.0.0/0"]
-  #cidr_blocks       = ["${chomp(data.http.myip.body)}/32"]
-  #ipv6_cidr_blocks  = [aws_vpc.example.ipv6_cidr_block]
-  security_group_id = module.web_alb_sg.sg_id
+resource "aws_security_group_rule" "user_alb" {
+    type = "ingress"
+    from_port = 8080
+    to_port = 8080
+    protocol = "tcp"
+    source_security_group_id = module.alb_sg.sg_id
+    security_group_id = module.user_sg.sg_id
+  
+}
+
+resource "aws_security_group_rule" "cart_alb" {
+    type = "ingress"
+    from_port = 8080
+    to_port = 8080
+    protocol = "tcp"
+    source_security_group_id = module.alb_sg.sg_id
+    security_group_id = module.cart_sg.sg_id
+  
+}
+
+resource "aws_security_group_rule" "alb_cart" {
+    type = "ingress"
+    from_port = 80
+    to_port = 80
+    protocol = "tcp"
+    source_security_group_id = module.cart_sg.sg_id
+    security_group_id = module.alb_sg.sg_id
+  
+}
+
+resource "aws_security_group_rule" "alb_user" {
+    type = "ingress"
+    from_port = 80
+    to_port = 80
+    protocol = "tcp"
+    source_security_group_id = module.user_sg.sg_id
+    security_group_id = module.alb_sg.sg_id
+  
+}
+
+resource "aws_security_group_rule" "shipping_alb" {
+    type = "ingress"
+    from_port = 8080
+    to_port = 8080
+    protocol = "tcp"
+    source_security_group_id = module.alb_sg.sg_id
+    security_group_id = module.shipping_sg.sg_id
+  
+}
+
+resource "aws_security_group_rule" "alb_shipping" {
+    type = "ingress"
+    from_port = 80
+    to_port = 80
+    protocol = "tcp"
+    source_security_group_id = module.shipping_sg.sg_id
+    security_group_id = module.alb_sg.sg_id
+  
 }

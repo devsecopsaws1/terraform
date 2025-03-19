@@ -80,7 +80,7 @@ resource "aws_ssm_parameter" "web_alb_sg_id" {
 resource "aws_ssm_parameter" "web_alb_listener_arn" {
   name  = "/${var.project_name}/${var.env}/web_alb_listener_arn"
   type  = "String"
-  value = aws_lb_listener.front_end.arn # module should have output declaration
+  value = aws_lb_listener.frontend.arn # module should have output declaration
 }
 
 resource "aws_ssm_parameter" "redis_sg_id" {
@@ -100,5 +100,19 @@ resource "aws_ssm_parameter" "cart_sg_id" {
   name  = "/${var.project_name}/${var.env}/cart_sg_id"
   type  = "String"
   value = module.cart_sg.sg_id # module should have output declaration
+  
+}
+
+resource "aws_ssm_parameter" "mysql_sg_id" {
+  name  = "/${var.project_name}/${var.env}/mysql_sg_id"
+  type  = "String"
+  value = module.mysql_sg.sg_id # module should have output declaration
+  
+}
+
+resource "aws_ssm_parameter" "shipping_sg_id" {
+  name  = "/${var.project_name}/${var.env}/shipping_sg_id"
+  type  = "String"
+  value = module.shipping_sg.sg_id # module should have output declaration
   
 }
